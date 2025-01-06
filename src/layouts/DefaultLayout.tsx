@@ -1,4 +1,5 @@
 import { JSX } from 'solid-js'
+import Header from '~/components/Header'
 
 interface DefaultLayoutProps {
   children?: JSX.Element | JSX.Element[]
@@ -7,8 +8,8 @@ interface DefaultLayoutProps {
 export default function DefaultLayout(props: DefaultLayoutProps) {
   return (
     <>
-      <div>Header</div>
-      {props.children}
+      <Header title="Tarot Recorder" />
+      <main class="pt-16">{props.children}</main>
       <div>Footer</div>
     </>
   )
