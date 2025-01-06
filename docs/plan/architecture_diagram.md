@@ -1,7 +1,7 @@
-
 ## アーキテクチャー図
 
 ### システム構成図
+
 - **フロントエンド**
   - 使用技術: Solid.js, Tailwind CSS, Shadcn（ヘッドレスUIライブラリ）
   - デプロイ: Firebase Hosting
