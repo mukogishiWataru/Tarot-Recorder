@@ -19,6 +19,7 @@ import Section from '~/layouts/Section'
 import Title from '~/layouts/Title'
 import { addRecord } from '~/lib/firestore'
 import Calendar from '~/components/Calendar'
+import CardSelecter from '~/components/CardSelecter'
 
 const Input = () => {
   const [question, setQuestion] = createSignal('')
@@ -124,51 +125,40 @@ const Input = () => {
           onDateChange={handleDateChange}
         />
       </Section>
+
       <Section>
-        <TextField value={question()} onChange={setQuestion}>
-          <TextFieldLabel>Question</TextFieldLabel>
+        <TextField value={question()} onChange={setQuestion} class="mb-5">
+          <TextFieldLabel class="text-xl font-bold">質問</TextFieldLabel>
           <TextFieldTextArea placeholder="Type your question here." />
         </TextField>
-      </Section>
 
-      <Section>
+        <div class="text-xl font-bold mb-1">カード</div>
         {(cards() || []).map((card, index) => (
           <div class="mb-4 border p-4 rounded">
-            <Select
-              value={!isNaN(card) ? cardList[card] : null}
-              onChange={(selectedLabel) => {
-                if (selectedLabel)
-                  updateCard(
-                    index,
-                    'card',
-                    cardList.indexOf(selectedLabel as string),
-                  )
-              }}
-              options={cardList}
-              placeholder="カードを選択してください。"
-              itemComponent={(props) => (
-                <SelectItem item={props.item}>{props.item.rawValue}</SelectItem>
-              )}
+            <div
+              class="flex gap-3 mb-2
+            "
             >
-              <SelectTrigger aria-label="TarotCard" class="w-[180px]">
-                <SelectValue<string>>
-                  {(state) => state.selectedOption()}
-                </SelectValue>
-              </SelectTrigger>
-              <SelectContent />
-            </Select>
-
-            <Toggle
-              pressed={positions()[index]}
-              onChange={(pressed) => updateCard(index, 'position', pressed)}
-            >
-              {(state) => <div>{state.pressed() ? '正位置' : '逆位置'}</div>}
-            </Toggle>
+              <CardSelecter
+                class=""
+                cardList={cardList}
+                cardNum={card}
+                updateCard={updateCard}
+                index={index}
+                placeholder="カードを選ぶ"
+              />
+              <Toggle
+                pressed={positions()[index]}
+                onChange={(pressed) => updateCard(index, 'position', pressed)}
+                class="border h-10 w-full"
+              >
+                {(state) => <div>{state.pressed() ? '正位置' : '逆位置'}</div>}
+              </Toggle>
+            </div>
 
             <TextField>
-              <TextFieldLabel>属性</TextFieldLabel>
               <TextFieldInput
-                placeholder=""
+                placeholder="属性がある場合は入力"
                 value={attributes()[index]}
                 onChange={(e) =>
                   updateCard(index, 'attribute', e.currentTarget.value)
@@ -177,15 +167,19 @@ const Input = () => {
             </TextField>
 
             {index !== 0 && (
-              <Button variant="destructive" onClick={() => removeCard(index)}>
-                Remove Card
+              <Button
+                class="mt-2 bg-black"
+                variant="destructive"
+                onClick={() => removeCard(index)}
+              >
+                削除
               </Button>
             )}
           </div>
         ))}
 
         <Button variant="default" onClick={addCard}>
-          Add Card
+          カードを追加
         </Button>
       </Section>
 
