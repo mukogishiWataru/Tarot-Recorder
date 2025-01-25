@@ -4,22 +4,13 @@ import {
   TextField,
   TextFieldTextArea,
   TextFieldLabel,
-  TextFieldInput,
 } from '~/components/ui/text-field'
-import { Toggle } from '~/components/ui/toggle'
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '~/components/ui/select'
 
 import Section from '~/layouts/Section'
 import Title from '~/layouts/Title'
 import { addRecord } from '~/lib/firestore'
 import Calendar from '~/components/Calendar'
-import CardSelecter from '~/components/CardSelecter'
+import InputCards from '~/components/InputCards'
 
 const Input = () => {
   const [question, setQuestion] = createSignal('')
@@ -41,41 +32,46 @@ const Input = () => {
     setSelectedDate(date.valueAsString[0])
   }
 
-  const cardList = [
-    '愚者',
-    '魔術師',
-    '女教皇',
-    '女帝',
-    '皇帝',
-    '法王',
-    '恋人',
-    '戦車',
-    '力',
-    '隠者',
-    '運命の輪',
-    '正義',
-    '吊るされた男',
-    '死神',
-    '節制',
-    '悪魔',
-    '塔',
-    '星',
-    '月',
-    '太陽',
-    '審判',
-    '世界',
-  ]
-
   const addCard = () => {
     setCards([...(cards() || []), NaN])
     setPositions([...positions(), true])
     setAttributes([...attributes(), ''])
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: 'smooth', // スムーズにスクロールする
+    })
   }
 
   const removeCard = (index: number) => {
     setCards(cards()?.filter((_, i) => i !== index) || [])
     setPositions(positions().filter((_, i) => i !== index))
     setAttributes(attributes().filter((_, i) => i !== index))
+  }
+
+  const moveCard = (index: number, direction: 'up' | 'down') => {
+    const newCards = [...(cards() || [])]
+    const newPositions = [...positions()]
+    const newAttributes = [...attributes()]
+
+    if (direction === 'up' && index > 0) {
+      newCards[index] = cards()[index - 1]
+      newCards[index - 1] = cards()[index]
+      newPositions[index] = positions()[index - 1]
+      newPositions[index - 1] = positions()[index]
+      newAttributes[index] = attributes()[index - 1]
+      newAttributes[index - 1] = attributes()[index]
+    } else if (direction === 'down' && index < newCards.length - 1) {
+      newCards[index] = cards()[index + 1]
+      newCards[index + 1] = cards()[index]
+      newPositions[index] = positions()[index + 1]
+      newPositions[index + 1] = positions()[index]
+      newAttributes[index] = attributes()[index + 1]
+      newAttributes[index + 1] = attributes()[index]
+    }
+
+    setCards(newCards)
+    setPositions(newPositions)
+    setAttributes(newAttributes)
   }
 
   const updateCard = (index: number, key: string, value: any) => {
@@ -133,59 +129,28 @@ const Input = () => {
         </TextField>
 
         <div class="text-xl font-bold mb-1">カード</div>
-        {(cards() || []).map((card, index) => (
-          <div class="mb-4 border p-4 rounded">
-            <div
-              class="flex gap-3 mb-2
-            "
-            >
-              <CardSelecter
-                class=""
-                cardList={cardList}
-                cardNum={card}
-                updateCard={updateCard}
-                index={index}
-                placeholder="カードを選ぶ"
-              />
-              <Toggle
-                pressed={positions()[index]}
-                onChange={(pressed) => updateCard(index, 'position', pressed)}
-                class="border h-10 w-full"
-              >
-                {(state) => <div>{state.pressed() ? '正位置' : '逆位置'}</div>}
-              </Toggle>
-            </div>
+        <InputCards
+          cards={cards()}
+          positions={positions()}
+          attributes={attributes()}
+          updateCard={updateCard}
+          removeCard={removeCard}
+          moveCard={moveCard}
+        />
 
-            <TextField>
-              <TextFieldInput
-                placeholder="属性がある場合は入力"
-                value={attributes()[index]}
-                onChange={(e) =>
-                  updateCard(index, 'attribute', e.currentTarget.value)
-                }
-              />
-            </TextField>
-
-            {index !== 0 && (
-              <Button
-                class="mt-2 bg-black"
-                variant="destructive"
-                onClick={() => removeCard(index)}
-              >
-                削除
-              </Button>
-            )}
-          </div>
-        ))}
-
-        <Button variant="default" onClick={addCard}>
+        <Button
+          variant="default"
+          onClick={() => {
+            setTimeout(addCard, 100)
+          }}
+        >
           カードを追加
         </Button>
       </Section>
 
       <Section>
         <Button variant="default" onClick={postData}>
-          Save
+          結果を記録する
         </Button>
       </Section>
     </>

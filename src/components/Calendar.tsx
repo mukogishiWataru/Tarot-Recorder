@@ -1,5 +1,3 @@
-import { createSignal } from 'solid-js'
-import { cn } from '~/lib/utils'
 import { CalendarDate } from '@internationalized/date'
 
 import { Index } from 'solid-js'
@@ -47,21 +45,7 @@ const Calendar = (props: CalendarProps) => {
       defaultValue={[defaultDate]}
       onValueChange={props.onDateChange as any}
       format={(e) => {
-        return `${e.year}/${e.month}/${e.day}`
-        // const parsedDate = new Date(Date.parse(e.toString()))
-
-        // const normalizedDate = new Date(
-        //   parsedDate.getUTCFullYear(),
-        //   parsedDate.getUTCMonth(),
-        //   parsedDate.getUTCDate(),
-        // )
-
-        // // カスタムフォーマットで日付を作成
-        // const year = normalizedDate.getFullYear()
-        // const month = normalizedDate.getMonth() + 1 // 月は0から始まるので+1
-        // const day = normalizedDate.getDate()
-
-        // return `${year}/${month}/${day}`
+        return `${e.year}年${e.month}月${e.day}日`
       }}
     >
       <DatePickerControl>

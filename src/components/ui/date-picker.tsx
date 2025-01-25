@@ -18,7 +18,7 @@ const DatePickerControl = (props: DatePickerPrimitive.ControlProps) => {
   const [local, others] = splitProps(props, ['class'])
   return (
     <DatePickerPrimitive.Control
-      class={cn('inline-flex items-center gap-1', local.class)}
+      class={cn('inline-flex items-center gap-3', local.class)}
       {...others}
     />
   )
@@ -47,7 +47,7 @@ const DatePickerTrigger = (props: DatePickerPrimitive.TriggerProps) => {
   return (
     <DatePickerPrimitive.Trigger
       class={cn(
-        'flex min-h-9 min-w-9 items-center justify-center rounded-md border border-border bg-background transition-[box-shadow,background-color] hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-[1.5px] focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-4',
+        ' flex min-h-9 min-w-9 items-center justify-center rounded-md border border-border bg-background transition-[box-shadow,background-color] hover:bg-accent/50 focus-visible:outline-none focus-visible:ring-[1.5px] focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 [&>svg]:size-4',
         local.class,
       )}
       {...others}
