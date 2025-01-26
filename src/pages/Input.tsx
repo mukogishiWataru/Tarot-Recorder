@@ -11,10 +11,11 @@ import Title from '~/layouts/Title'
 import { addRecord } from '~/lib/firestore'
 import Calendar from '~/components/Calendar'
 import InputCards from '~/components/InputCards'
-import { LoadingContext } from '~/context/Context'
+import { LoadingContext, SuccessContext } from '~/context/Context'
 
 const Input = () => {
-  const { _, setLoading } = useContext(LoadingContext) as any
+  const { loading, setLoading } = useContext(LoadingContext) as any
+  const { success, setSuccess } = useContext(SuccessContext) as any
 
   const [question, setQuestion] = createSignal('')
   const [cards, setCards] = createSignal<number[]>([NaN])
@@ -116,7 +117,14 @@ const Input = () => {
       setSelectedDate(formatDateToString(new Date()))
     }
 
-    setTimeout(() => setLoading(false), 222)
+    setTimeout(() => {
+      if (res) setSuccess(true)
+
+      setTimeout(() => {
+        setLoading(false)
+        setSuccess(false)
+      }, 777)
+    }, 777)
   }
 
   return (
