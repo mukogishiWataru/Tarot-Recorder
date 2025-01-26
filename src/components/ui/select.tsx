@@ -1,4 +1,3 @@
-import type { JSX, ValidComponent } from 'solid-js'
 import { splitProps } from 'solid-js'
 
 import type { PolymorphicProps } from '@kobalte/core/polymorphic'

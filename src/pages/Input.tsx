@@ -1,4 +1,4 @@
-import { createSignal } from 'solid-js'
+import { createSignal, useContext } from 'solid-js'
 import { Button } from '~/components/ui/button'
 import {
   TextField,
@@ -11,8 +11,11 @@ import Title from '~/layouts/Title'
 import { addRecord } from '~/lib/firestore'
 import Calendar from '~/components/Calendar'
 import InputCards from '~/components/InputCards'
+import { LoadingContext } from '~/context/Context'
 
 const Input = () => {
+  const { _, setLoading } = useContext(LoadingContext) as any
+
   const [question, setQuestion] = createSignal('')
   const [cards, setCards] = createSignal<number[]>([NaN])
   const [positions, setPositions] = createSignal<boolean[]>([true])
@@ -91,6 +94,8 @@ const Input = () => {
   }
 
   const postData = async () => {
+    setLoading(true)
+
     const data = {
       date: selectedDate(),
       question: question(),
@@ -110,6 +115,8 @@ const Input = () => {
       setAttributes([''])
       setSelectedDate(formatDateToString(new Date()))
     }
+
+    setTimeout(() => setLoading(false), 222)
   }
 
   return (
