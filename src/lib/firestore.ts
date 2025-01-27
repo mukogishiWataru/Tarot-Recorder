@@ -4,10 +4,14 @@ import {
   getDoc,
   doc,
   serverTimestamp,
+  DocumentSnapshot,
+  DocumentData,
 } from 'firebase/firestore'
 import { db } from '~/firebase'
 
-export const addRecord = async (data: any) => {
+export const addRecord = async (
+  data: any,
+): Promise<DocumentSnapshot<DocumentData, DocumentData> | null> => {
   try {
     const enrichedData = {
       ...data,
@@ -22,11 +26,12 @@ export const addRecord = async (data: any) => {
       console.log('Document successfully written:', savedDoc.data())
       return savedDoc
     } else {
-      throw new Error('Document write failed: No data found.')
+      new Error('Document write failed: No data found.')
+      return null
     }
   } catch (e) {
     console.error('Error adding document: ', e)
-    throw e // エラーを呼び出し元に伝える
+    return null
   }
 }
 

@@ -11,11 +11,10 @@ import Title from '~/layouts/Title'
 import { addRecord } from '~/lib/firestore'
 import Calendar from '~/components/Calendar'
 import InputCards from '~/components/InputCards'
-import { LoadingContext, SuccessContext } from '~/context/Context'
+import { StatusContext } from '~/context/Context'
 
 const Input = () => {
-  const { loading, setLoading } = useContext(LoadingContext) as any
-  const { success, setSuccess } = useContext(SuccessContext) as any
+  const { status, setStatus } = useContext(StatusContext) as any
 
   const [question, setQuestion] = createSignal('')
   const [cards, setCards] = createSignal<number[]>([NaN])
@@ -95,7 +94,7 @@ const Input = () => {
   }
 
   const postData = async () => {
-    setLoading(true)
+    setStatus('loading')
 
     const data = {
       date: selectedDate(),
@@ -118,13 +117,12 @@ const Input = () => {
     }
 
     setTimeout(() => {
-      if (res) setSuccess(true)
+      setStatus(res ? 'success' : 'failure')
 
       setTimeout(() => {
-        setLoading(false)
-        setSuccess(false)
+        setStatus(null)
       }, 777)
-    }, 777)
+    }, 222)
   }
 
   return (
